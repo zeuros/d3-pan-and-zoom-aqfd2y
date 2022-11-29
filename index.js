@@ -2,16 +2,16 @@ import * as d3 from 'd3';
 
 import './style.css';
 
-const IMAGE_WIDTH = 400;
-const IMAGE_HEIGHT = 400;
-
 const zoomed = (wrapper, svg) => (evt) => {
   const scale = evt.transform.k;
   const scaledWidth = IMAGE_WIDTH * scale;
   const scaledHeight = IMAGE_HEIGHT * scale;
 
   // Change SVG dimensions.
-  svg.attr('width', scaledWidth).attr('height', scaledHeight);
+  svg
+    .attr('viewBox', `${0} ${0} ${scaledWidth} ${scaledHeight}`)
+    .attr('width', scaledWidth)
+    .attr('height', scaledHeight);
 
   // Scale the image itself.
   svg.select('g').attr('transform', `scale(${scale})`);
@@ -35,11 +35,16 @@ const scrolled = (wrapper) => (evt) => {
   wrapper.call(d3.zoom().translateTo, x / scale, y / scale);
 };
 
+const IMAGE_WIDTH = 400;
+const IMAGE_HEIGHT = 400;
 const wrapper = d3.select('#wrapper');
 const svg = d3.select('svg');
 
 // Set initial SVG dimensions.
-svg.attr('width', IMAGE_WIDTH).attr('height', IMAGE_HEIGHT);
+svg
+  .attr('viewBox', `${0} ${0} ${IMAGE_WIDTH} ${IMAGE_HEIGHT}`)
+  .attr('width', IMAGE_WIDTH)
+  .attr('height', IMAGE_HEIGHT);
 
 // Set up d3-zoom and callbacks.
 d3.select('#wrapper')
